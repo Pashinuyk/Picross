@@ -2,7 +2,9 @@ import './UppearBar.css'
 
 function UppearBar() {
   return (
-    <header>Picross
+    <header>
+      <span>Picross</span>
+      <span style={{float: 'right'}}>ピクロス</span>
     </header>
   );
 }
