@@ -10,9 +10,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <UppearBar />
-    <div>
-      <App level={levels} />
-    </div>
+    <App level={levels} />
   </React.StrictMode>
 );
 
