@@ -2,14 +2,17 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import UppearBar from './UppearBar';
+import UppearBar from './components/UppearBar';
 import reportWebVitals from './reportWebVitals';
+import levels from './data';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <UppearBar />
-    <App />
+    <div>
+      <App level={levels} />
+    </div>
   </React.StrictMode>
 );
 

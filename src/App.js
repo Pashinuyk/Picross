@@ -1,12 +1,14 @@
-import logo from './logo.svg';
 import './App.css'
+import GameField from './components/GameField'
 
-function App() {
-  return (
-    <div className="App">
+const num = 0
 
-    </div>
-  );
-}
+const App = (props) => {
+      return (
+        <div className='App'>
+          <GameField level={props.level}/>
+        </div>
+      );
+    }
 
 export default App;
