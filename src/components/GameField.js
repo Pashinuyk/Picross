@@ -2,11 +2,16 @@ import './GameField.css'
 import { Stack } from 'immutable'
 import { useState } from 'react'
 
-const num = 2
+const num = 4
+
+function Aiming(el) {
+  el.target.parentElement.children[0].className = 'redrawnNumber'
+  console.log(Math.floor(el.target.id))
+}
 
 const Mess = (el, key) => {
  // el.target.innerHTML = '●'
-  el.target.className='ChoosenOne'
+  el.target.classList.add('ChoosenOne')
   console.log(el.target.id)
 }
 
@@ -14,6 +19,8 @@ const Otmetka = (el) => {
   el.preventDefault();
   if (el.target.innerHTML == 'X') el.target.innerHTML = ''
   else el.target.innerHTML = 'X'
+
+  console.log(el.target.parentElement.children[15])
 }
 
 function HorizontTips(str) {
@@ -39,7 +46,7 @@ function VerticalTips(table) {
   let tableStack = [...new Stack]
   let counter = 0
   
-  for (let i=0; i<table.length; i++) {
+  for (let i=0; i<table[0].length; i++) {
     for (let j=0; j<table.length; j++) {
       if (table[j][i] != 0) {
         if (j == table.length-1) {
@@ -54,14 +61,17 @@ function VerticalTips(table) {
       }
     }
 
-    console.log('Stack: ', stack)
     if (stack.length == 0) stack.push(0)
     tableStack.push(stack)
     stack = []
   }
 
-  console.log('StackTABLE: ',tableStack)
   return(tableStack)
+}
+
+function NumbersRecolor(el) {
+  if (!el.target.classList.contains('redrawnNumber')) el.target.className = 'redrawnNumber'
+  else el.target.classList.remove('redrawnNumber')
 }
 
 const GameField = (props) => {
@@ -69,20 +79,23 @@ const GameField = (props) => {
     const [Dragging, setDragging] = useState(false)
 
     return (
-            <div style={{display: 'grid', 
+            <div style={{display: 'grid',  
               gridTemplateRows: `160px repeat(${props.level[num].content.length}, 1fr)`,  
               gridTemplateColumns: `25% repeat(${props.level[num].content[0].length}, 1fr)`,
-              width: 'max-content'
+              width: 'max-content',
+              margin: 'auto'
              }}>  
-             
-           <div></div>
+             {/* Верхние подсказки */}
+
+          <div></div>
           {VerticalTips(props.level[num].content).map((str) =>
             <div style={{display: 'flex', overflowY: 'auto',
               flexDirection: 'column-reverse'
             }}>
               {str.reverse().map((val) =>
                 <div style={{fontSize: '20px', 
-                  fontWeight: 'bold'}}>{val}</div>
+                  fontWeight: 'bold'}}
+                  onClick={(e) => NumbersRecolor(e)}>{val}</div>
               )}
             </div>  
           )}
@@ -91,18 +104,25 @@ const GameField = (props) => {
 
           {props.level[num].content.map((str, ind1) =>
           <>
+                {/* Боковые подсказки */}
                 <div style={{display: 'flex',
                   alignItems: 'center',
                   flexDirection: 'row-reverse',
                   fontSize: '20px',
                   fontWeight: 'bold', 
                   overflowX: 'auto',
-                  }}>{HorizontTips(str).reverse().map((val) => <div style={{margin: '0px 10px'}}>{val}</div>)}
+                  }}>{HorizontTips(str).reverse().map((val) => 
+                  <div style={{margin: '0px 10px'}} 
+                  onClick={(e) => NumbersRecolor(e)}>
+                    {val}
+                  </div>)}
                 </div>
 
+               {/* Игровое поле */}
                { str.map((val, ind2) =>       
                   <button id={ind1 + (ind2 < 10 ? ind2/10 : ind2/100)} 
                     onClick={(e) => Mess(e)}
+                    onMouseOver={(e) => Aiming(e)}
                     onContextMenu={(e) => Otmetka(e)}
                     className={ind1 == props.level[num].content.length-1 && ind2 == 0 ? 'borderLeft borderBottom'
                     : ind1 == 0 && ind2 % 5 == 0 ? 'borderTop borderLeft'
