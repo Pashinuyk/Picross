@@ -14,18 +14,21 @@ const Otmetka = (el) => {
 
 const GameField = (props) => {
     return (
-        <>
-          {
-            props.level[num].content.map((str, ind1) =>
-              <div style={{display: 'grid', justifyContent: 'left'}}>
-                <div style={{border: 'solid 2px red', width: '310px', textAlign: 'right'}}>
-                {str.reduce((product, item) => {
-                  return item>0 ? product+1 : product 
-                }, 0)}
-                </div>
-
-                <div style={{border: 'solid 2px green'}}>
-                {str.map((val, ind2) =>
+            <div style={{display: 'grid', 
+              gridTemplateRows: `repeat(${props.level[num].content.length}, 1fr)`,  
+              gridTemplateColumns: `25% repeat(${props.level[num].content[0].length}, 1fr)`,
+              width: 'max-content',
+              
+             }}>  
+           
+          {props.level[num].content.map((str, ind1) =>
+          <>
+                <div style={{display: 'flex',
+                  alignItems: 'center',
+                  flexDirection: 'row-reverse', 
+                  border: 'solid 2px red'}}>1</div>
+               { str.map((val, ind2) =>
+                                
                   <button id={ind1 + (ind2 < 10 ? ind2/10 : ind2/100)} 
                     onClick={(e) => Mess(e)}
                     onContextMenu={(e) => Otmetka(e)}
@@ -45,12 +48,11 @@ const GameField = (props) => {
                     : ind1 % 5 == 0 && ind2 % 5 == 0 ? 'borderTop borderLeft'
                     : ind1 % 5 == 0 ? 'borderTop'
                     : ind2 % 5 == 0 ? 'borderLeft'
-                    : ''}> </button>
-                )}
-                </div>
-              </div>
-          )}
-        </>
+                    : ''}></button>
+                )}</>
+               
+
+          )}</div>
     )
 }
 
