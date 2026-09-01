@@ -17,11 +17,14 @@ const GameField = (props) => {
         <>
           {
             props.level[num].content.map((str, ind1) =>
-              <div>
+              <div style={{display: 'grid', justifyContent: 'left'}}>
+                <div style={{border: 'solid 2px red', width: '310px', textAlign: 'right'}}>
                 {str.reduce((product, item) => {
                   return item>0 ? product+1 : product 
                 }, 0)}
+                </div>
 
+                <div style={{border: 'solid 2px green'}}>
                 {str.map((val, ind2) =>
                   <button id={ind1 + (ind2 < 10 ? ind2/10 : ind2/100)} 
                     onClick={(e) => Mess(e)}
@@ -44,6 +47,7 @@ const GameField = (props) => {
                     : ind2 % 5 == 0 ? 'borderLeft'
                     : ''}> </button>
                 )}
+                </div>
               </div>
           )}
         </>
