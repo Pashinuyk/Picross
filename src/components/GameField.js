@@ -2,13 +2,19 @@ import './GameField.css'
 import { Stack } from 'immutable'
 import { useState } from 'react'
 
-const num = 4
+const num = 3
 
-function Aiming(el) {
+function AimingField(el) {
   el.target.parentElement.children[1+Number(el.target.id.split(' ')[1])].classList.toggle('backlight')
   document.getElementById(Math.floor(Number(el.target.id.split(' ')[0]))).classList.toggle('backlight')
 
-//  console.log(el.target.id % 1 != 0 ? Math.floor(Number(String((el.target.id * 10) % 10).split('.')[1])) : 0)
+}
+
+function AimingTips(el, table) {
+  console.log(el.currentTarget.id)
+  for (let i=0; i<table; i++) {
+    document.getElementById(`${el.currentTarget.id} ${i}`).classList.toggle('backlight')
+  }   
 }
 
 // Действие при клике ЛКМ по клетке
@@ -117,7 +123,10 @@ const GameField = (props) => {
           {props.level[num].content.map((str, ind1) =>
           <>
                 {/* Боковые подсказки */}
-                <div id={ind1} style={{display: 'flex',
+                <div id={ind1} 
+                onMouseOver={(e) => AimingTips(e, props.level[num].content.length)}
+                onMouseOut={(e) => AimingTips(e, props.level[num].content.length)}
+                style={{display: 'flex',
                   alignItems: 'center',
                   flexDirection: 'row-reverse',
                   fontSize: '20px',
@@ -134,8 +143,8 @@ const GameField = (props) => {
                { str.map((val, ind2) =>       
                   <button id={ind1 + ' ' + ind2} 
                     onClick={(e) => Mess(e)}
-                    onMouseOver={(e) => Aiming(e)}
-                    onMouseOut={(e) => Aiming(e)}
+                    onMouseOver={(e) => AimingField(e)}
+                    onMouseOut={(e) => AimingField(e)}
                     onContextMenu={(e) => Otmetka(e)}
                     className={ind1 == props.level[num].content.length-1 && ind2 == 0 ? 'borderLeft borderBottom'
                     : ind1 == 0 && ind2 % 5 == 0 ? 'borderTop borderLeft'
