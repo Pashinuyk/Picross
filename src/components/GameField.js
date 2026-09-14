@@ -2,13 +2,13 @@ import './GameField.css'
 import { Stack } from 'immutable'
 import { useState } from 'react'
 
-const num = 1
+const num = 4
 
 function Aiming(el) {
-  el.target.parentElement.children[1+Math.round((el.target.id - Math.floor(el.target.id)) * 10)].classList.toggle('backlight')
-  document.getElementById(Math.floor(el.target.id)).classList.toggle('backlight')
+  el.target.parentElement.children[1+Number(el.target.id.split(' ')[1])].classList.toggle('backlight')
+  document.getElementById(Math.floor(Number(el.target.id.split(' ')[0]))).classList.toggle('backlight')
 
-  console.log(Math.floor(el.target.id) + '.' + Math.round((el.target.id - Math.floor(el.target.id)) * 10))
+//  console.log(el.target.id % 1 != 0 ? Math.floor(Number(String((el.target.id * 10) % 10).split('.')[1])) : 0)
 }
 
 // Действие при клике ЛКМ по клетке
@@ -132,7 +132,7 @@ const GameField = (props) => {
 
                {/* Игровое поле */}
                { str.map((val, ind2) =>       
-                  <button id={ind1 + (ind2 < 10 ? ind2/10 : ind2/100)} 
+                  <button id={ind1 + ' ' + ind2} 
                     onClick={(e) => Mess(e)}
                     onMouseOver={(e) => Aiming(e)}
                     onMouseOut={(e) => Aiming(e)}
