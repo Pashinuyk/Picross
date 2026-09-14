@@ -2,27 +2,37 @@ import './GameField.css'
 import { Stack } from 'immutable'
 import { useState } from 'react'
 
-const num = 4
+const num = 1
 
 function Aiming(el) {
-  el.target.parentElement.children[0].className = 'redrawnNumber'
-  console.log(Math.floor(el.target.id))
+  el.target.parentElement.children[1+Math.round((el.target.id - Math.floor(el.target.id)) * 10)].classList.toggle('backlight')
+  document.getElementById(Math.floor(el.target.id)).classList.toggle('backlight')
+
+  console.log(Math.floor(el.target.id) + '.' + Math.round((el.target.id - Math.floor(el.target.id)) * 10))
 }
 
+// Действие при клике ЛКМ по клетке
 const Mess = (el, key) => {
- // el.target.innerHTML = '●'
+
+  if (el.target.innerHTML = 'X') el.target.innerHTML = ''
+
   el.target.classList.add('ChoosenOne')
   console.log(el.target.id)
 }
 
+// Действие при клике ПКМ по клетке
 const Otmetka = (el) => {
   el.preventDefault();
+
+  if (el.target.classList.contains('ChoosenOne')) return
+
   if (el.target.innerHTML == 'X') el.target.innerHTML = ''
   else el.target.innerHTML = 'X'
 
   console.log(el.target.parentElement.children[15])
 }
 
+// Размещение чисел-подсказок сбоку
 function HorizontTips(str) {
   let stack = [...new Stack]
   str.reduce((product, item, index) => {
@@ -41,6 +51,7 @@ function HorizontTips(str) {
   return(stack)
 }
 
+// Размещение чисел-подсказок сверху
 function VerticalTips(table) {
   let stack = [...new Stack]
   let tableStack = [...new Stack]
@@ -69,6 +80,7 @@ function VerticalTips(table) {
   return(tableStack)
 }
 
+// Перекраска чисел-подсказок
 function NumbersRecolor(el) {
   if (!el.target.classList.contains('redrawnNumber')) el.target.className = 'redrawnNumber'
   else el.target.classList.remove('redrawnNumber')
@@ -105,7 +117,7 @@ const GameField = (props) => {
           {props.level[num].content.map((str, ind1) =>
           <>
                 {/* Боковые подсказки */}
-                <div style={{display: 'flex',
+                <div id={ind1} style={{display: 'flex',
                   alignItems: 'center',
                   flexDirection: 'row-reverse',
                   fontSize: '20px',
@@ -123,6 +135,7 @@ const GameField = (props) => {
                   <button id={ind1 + (ind2 < 10 ? ind2/10 : ind2/100)} 
                     onClick={(e) => Mess(e)}
                     onMouseOver={(e) => Aiming(e)}
+                    onMouseOut={(e) => Aiming(e)}
                     onContextMenu={(e) => Otmetka(e)}
                     className={ind1 == props.level[num].content.length-1 && ind2 == 0 ? 'borderLeft borderBottom'
                     : ind1 == 0 && ind2 % 5 == 0 ? 'borderTop borderLeft'
