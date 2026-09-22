@@ -32,3 +32,7 @@ button {
 .backlight {
       background-color: rgb(46, 204, 113, 0.4)
 }
+
+.backlightChoosen {
+      background-color: rgb(30, 187, 192)
+}

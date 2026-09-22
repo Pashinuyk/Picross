@@ -2,18 +2,31 @@ import './GameField.css'
 import { Stack } from 'immutable'
 import { useState } from 'react'
 
-const num = 3
+const num = 4
 
 function AimingField(el) {
   el.target.parentElement.children[1+Number(el.target.id.split(' ')[1])].classList.toggle('backlight')
-  document.getElementById(Math.floor(Number(el.target.id.split(' ')[0]))).classList.toggle('backlight')
+  document.getElementById('H ' + String(Math.floor(Number(el.target.id.split(' ')[0])))).classList.toggle('backlight')
 
 }
 
-function AimingTips(el, table) {
+function AimingTipsH(el, size) {
   console.log(el.currentTarget.id)
-  for (let i=0; i<table; i++) {
-    document.getElementById(`${el.currentTarget.id} ${i}`).classList.toggle('backlight')
+
+  for (let i=0; i<size; i++) {
+    let elem = document.getElementById(`${el.currentTarget.id.split(' ')[1]} ${i}`)
+    if (elem.classList.contains('ChoosenOne')) elem.classList.toggle('backlightChoosen')
+    else elem.classList.toggle('backlight')
+  }   
+}
+
+function AimingTipsV(el, size) {
+  console.log(el.currentTarget.id)
+
+  for (let i=0; i<size; i++) {
+    let elem = document.getElementById(`${i} ${el.currentTarget.id.split(' ')[1]}`)
+    if (elem.classList.contains('ChoosenOne')) elem.classList.toggle('backlightChoosen')
+    else document.getElementById(`${i} ${el.currentTarget.id.split(' ')[1]}`).classList.toggle('backlight')
   }   
 }
 
@@ -106,8 +119,11 @@ const GameField = (props) => {
              {/* Верхние подсказки */}
 
           <div></div>
-          {VerticalTips(props.level[num].content).map((str) =>
-            <div style={{display: 'flex', overflowY: 'auto',
+          {VerticalTips(props.level[num].content).map((str, ind) =>
+            <div id={'V ' + ind}
+              onMouseOver={(e) => AimingTipsV(e, props.level[num].content.length)}
+              onMouseOut={(e) => AimingTipsV(e, props.level[num].content.length)}              
+              style={{display: 'flex', overflowY: 'auto',
               flexDirection: 'column-reverse'
             }}>
               {str.reverse().map((val) =>
@@ -123,9 +139,9 @@ const GameField = (props) => {
           {props.level[num].content.map((str, ind1) =>
           <>
                 {/* Боковые подсказки */}
-                <div id={ind1} 
-                onMouseOver={(e) => AimingTips(e, props.level[num].content.length)}
-                onMouseOut={(e) => AimingTips(e, props.level[num].content.length)}
+                <div id={'H' + ' ' + ind1} 
+                onMouseOver={(e) => AimingTipsH(e, props.level[num].content[ind1].length)}
+                onMouseOut={(e) => AimingTipsH(e, props.level[num].content[ind1].length)}
                 style={{display: 'flex',
                   alignItems: 'center',
                   flexDirection: 'row-reverse',
