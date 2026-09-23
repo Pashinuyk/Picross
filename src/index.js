@@ -1,17 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { useState } from 'react'
 import './index.css';
 import App from './App';
 import UppearBar from './components/UppearBar';
+import LowerMenu from './components/LowerMenu';
 import reportWebVitals from './reportWebVitals';
 import levels from './data';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <UppearBar />
-    <App level={levels} />
-  </React.StrictMode>
+
+  root.render(
+    <React.StrictMode>
+      <UppearBar />
+      <App level={levels} />
+      <LowerMenu />
+    </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
