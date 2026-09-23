@@ -2,7 +2,7 @@ import './GameField.css'
 import { Stack } from 'immutable'
 import { useState } from 'react'
 
-const num = 4
+const num = 5
 
 function AimingField(el) {
   el.target.parentElement.children[1+Number(el.target.id.split(' ')[1])].classList.toggle('backlight')
@@ -106,8 +106,12 @@ function NumbersRecolor(el) {
 }
 
 const GameField = (props) => {
-
+  
+    const [solMatrix, changeSolution] = useState(Array
+      .from({length: props.level[0].content.length}, () => Array(props.level[0].content[0].length).fill(0)))
     const [Dragging, setDragging] = useState(false)
+    console.log('ORIGINAL MATRIX: ', props.level)
+    console.log('SOLUTION MATRIX: ', solMatrix)
 
     return (
             <div style={{display: 'grid',  
