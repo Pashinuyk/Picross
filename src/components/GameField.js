@@ -2,57 +2,16 @@ import './GameField.css'
 import { Stack } from 'immutable'
 import { useState } from 'react'
 
-const num = 5
+const num = 0
 
-function AimingField(el) {
-  el.target.parentElement.children[1+Number(el.target.id.split(' ')[1])].classList.toggle('backlight')
-  document.getElementById('H ' + String(Math.floor(Number(el.target.id.split(' ')[0])))).classList.toggle('backlight')
+function ChangeSolMatrix(table, value, row, col) {
+  table[row][col] = value
 
-}
-
-function AimingTipsH(el, size) {
-  console.log(el.currentTarget.id)
-
-  for (let i=0; i<size; i++) {
-    let elem = document.getElementById(`${el.currentTarget.id.split(' ')[1]} ${i}`)
-    if (elem.classList.contains('ChoosenOne')) elem.classList.toggle('backlightChoosen')
-    else elem.classList.toggle('backlight')
-  }   
-}
-
-function AimingTipsV(el, size) {
-  console.log(el.currentTarget.id)
-
-  for (let i=0; i<size; i++) {
-    let elem = document.getElementById(`${i} ${el.currentTarget.id.split(' ')[1]}`)
-    if (elem.classList.contains('ChoosenOne')) elem.classList.toggle('backlightChoosen')
-    else document.getElementById(`${i} ${el.currentTarget.id.split(' ')[1]}`).classList.toggle('backlight')
-  }   
-}
-
-// Действие при клике ЛКМ по клетке
-const Mess = (el, key) => {
-
-  if (el.target.innerHTML = 'X') el.target.innerHTML = ''
-
-  el.target.classList.add('ChoosenOne')
-  console.log(el.target.id)
-}
-
-// Действие при клике ПКМ по клетке
-const Otmetka = (el) => {
-  el.preventDefault();
-
-  if (el.target.classList.contains('ChoosenOne')) return
-
-  if (el.target.innerHTML == 'X') el.target.innerHTML = ''
-  else el.target.innerHTML = 'X'
-
-  console.log(el.target.parentElement.children[15])
+  return table
 }
 
 // Размещение чисел-подсказок сбоку
-function HorizontTips(str) {
+function HorizontalTipsPlace(str) {
   let stack = [...new Stack]
   str.reduce((product, item, index) => {
     
@@ -71,7 +30,7 @@ function HorizontTips(str) {
 }
 
 // Размещение чисел-подсказок сверху
-function VerticalTips(table) {
+function VerticalTipsPlace(table) {
   let stack = [...new Stack]
   let tableStack = [...new Stack]
   let counter = 0
@@ -99,19 +58,82 @@ function VerticalTips(table) {
   return(tableStack)
 }
 
-// Перекраска чисел-подсказок
+//Выделение строк с числами-подсказками когда курсор
+//над кнопками
+function AimingField(el) {
+  el.target.parentElement.children[1+Number(el.target.id.split(' ')[1])].classList.toggle('backlight')
+  document.getElementById('H ' + String(Math.floor(Number(el.target.id.split(' ')[0])))).classList.toggle('backlight')
+
+}
+
+function LengthCount(str, ind) {
+  
+}
+
+//Выделение поля когда курсор на
+//боковых числах-подсказках
+function AimingTipsH(el, size) {
+  //console.log(el.currentTarget.id)
+
+  for (let i=0; i<size; i++) {
+    let elem = document.getElementById(`${el.currentTarget.id.split(' ')[1]} ${i}`)
+    if (elem.classList.contains('choosenOne')) elem.classList.toggle('backlightChoosen')
+    else elem.classList.toggle('backlight')
+  }   
+}
+
+//Выделение поля когда курсор на
+//верхних числах-подсказках
+function AimingTipsV(el, size) {
+  //console.log(el.currentTarget.id)
+
+  for (let i=0; i<size; i++) {
+    let elem = document.getElementById(`${i} ${el.currentTarget.id.split(' ')[1]}`)
+    if (elem.classList.contains('choosenOne')) elem.classList.toggle('backlightChoosen')
+    else document.getElementById(`${i} ${el.currentTarget.id.split(' ')[1]}`).classList.toggle('backlight')
+  }   
+}
+
+// Перекраска чисел-подсказок при нажатии по ним
 function NumbersRecolor(el) {
   if (!el.target.classList.contains('redrawnNumber')) el.target.className = 'redrawnNumber'
   else el.target.classList.remove('redrawnNumber')
 }
 
+// Действие при клике ЛКМ или ПКМ по клетке
+const ButtonAction = (OGtable, table, change, el, value) => {
+  el.preventDefault();
+  
+  const row = el.target.id.split(' ')[0]
+  const col = el.target.id.split(' ')[1]
+
+  if (table[row][col] == 1 || table[row][col] == 3) return
+
+  const newTable = table.map(row => [...row])
+
+  if (OGtable[row][col] != 1 && value == 1) {
+    change(ChangeSolMatrix(newTable, 3, row, col))
+  } 
+  else if (newTable[row][col] == 2 && value == 2) change(ChangeSolMatrix(newTable, 0, row, col))
+  else change(ChangeSolMatrix(newTable, value, row, col))
+
+}
+
+// Проверка на правильный ответ
+const CheckForCorrectness = () => {
+
+}
+
 const GameField = (props) => {
   
-    const [solMatrix, changeSolution] = useState(Array
-      .from({length: props.level[0].content.length}, () => Array(props.level[0].content[0].length).fill(0)))
+    const OGtable = props.level[num].content
+    const rows = OGtable.length;
+    const cols = OGtable.length;
+  
+    const [solMatrix, changeSolution] = useState(
+      Array.from({ length: rows }, () => Array(cols).fill(0))
+    );
     const [Dragging, setDragging] = useState(false)
-    console.log('ORIGINAL MATRIX: ', props.level)
-    console.log('SOLUTION MATRIX: ', solMatrix)
 
     return (
             <div style={{display: 'grid',  
@@ -120,13 +142,13 @@ const GameField = (props) => {
               width: 'max-content',
               margin: 'auto'
              }}>  
-             {/* Верхние подсказки */}
 
+             {/* Верхние подсказки */}
           <div></div>
-          {VerticalTips(props.level[num].content).map((str, ind) =>
+          {VerticalTipsPlace(props.level[num].content).map((str, ind) =>
             <div id={'V ' + ind}
-              onMouseOver={(e) => AimingTipsV(e, props.level[num].content.length)}
-              onMouseOut={(e) => AimingTipsV(e, props.level[num].content.length)}              
+              onMouseOver={(e) => AimingTipsV(e, solMatrix.length)}
+              onMouseOut={(e) => AimingTipsV(e, solMatrix.length)}              
               style={{display: 'flex', overflowY: 'auto',
               flexDirection: 'column-reverse'
             }}>
@@ -140,49 +162,49 @@ const GameField = (props) => {
 
 
 
-          {props.level[num].content.map((str, ind1) =>
+          {solMatrix.map((str, ind1) =>
           <>
                 {/* Боковые подсказки */}
                 <div id={'H' + ' ' + ind1} 
-                onMouseOver={(e) => AimingTipsH(e, props.level[num].content[ind1].length)}
-                onMouseOut={(e) => AimingTipsH(e, props.level[num].content[ind1].length)}
+                onMouseOver={(e) => AimingTipsH(e, solMatrix[ind1].length)}
+                onMouseOut={(e) => AimingTipsH(e, solMatrix[ind1].length)}
                 style={{display: 'flex',
                   alignItems: 'center',
                   flexDirection: 'row-reverse',
                   fontSize: '20px',
                   fontWeight: 'bold', 
                   overflowX: 'auto',
-                  }}>{HorizontTips(str).reverse().map((val) => 
+                }}>{HorizontalTipsPlace(props.level[num].content[ind1]).reverse().map((val) => 
                   <div style={{margin: '0px 10px'}} 
-                  onClick={(e) => NumbersRecolor(e)}>
-                    {val}
+                    onClick={(e) => NumbersRecolor(e)}>
+                      {val}
                   </div>)}
                 </div>
 
                {/* Игровое поле */}
-               { str.map((val, ind2) =>       
+               { str.map((val, ind2) =>    
                   <button id={ind1 + ' ' + ind2} 
-                    onClick={(e) => Mess(e)}
+                    onClick={(e) => ButtonAction(OGtable, solMatrix, changeSolution, e, 1)}
+                    onContextMenu={(e) => ButtonAction(OGtable, solMatrix, changeSolution, e, 2)}
                     onMouseOver={(e) => AimingField(e)}
                     onMouseOut={(e) => AimingField(e)}
-                    onContextMenu={(e) => Otmetka(e)}
-                    className={ind1 == props.level[num].content.length-1 && ind2 == 0 ? 'borderLeft borderBottom'
-                    : ind1 == 0 && ind2 % 5 == 0 ? 'borderTop borderLeft'
-                    : ind1 == props.level[num].content.length-1 && ind2 % 5 == 0 ? 'borderBottom borderLeft'
-                    : ind1 % 5 == 0 && ind2 == 0 ? 'borderLeft borderTop'
-                    : ind1 % 5 == 0 && ind2 == props.level[num].content[ind1].length-1 ? 'borderRight borderTop'
-                    : ind1 == 0 && ind2 == props.level[num].content[ind1].length-1 ? 'borderRight borderTop' 
-                    : ind1 == 0 && ind2 == 0 ? 'borderTop borderLeft' 
-                    : ind1 == 0 ? 'borderTop'
-                    : ind2 == 0 ? 'borderLeft'
-                    : ind1 == props.level[num].content.length-1 && ind2 == props.level[num].content[ind1].length-1 ? 'borderRight borderBottom' 
-                    : ind1 == props.level[num].content.length-1 ? 'borderBottom' 
-                    : ind2 == props.level[num].content[ind1].length-1 ? 'borderRight' 
-                    
-                    : ind1 % 5 == 0 && ind2 % 5 == 0 ? 'borderTop borderLeft'
-                    : ind1 % 5 == 0 ? 'borderTop'
-                    : ind2 % 5 == 0 ? 'borderLeft'
-                    : ''}></button>
+                    className={(ind1 == solMatrix.length-1 && ind2 == 0 ? 'borderLeft borderBottom'
+                      : ind1 == 0 && ind2 % 5 == 0 ? 'borderTop borderLeft'
+                      : ind1 == solMatrix.length-1 && ind2 % 5 == 0 ? 'borderBottom borderLeft'
+                      : ind1 % 5 == 0 && ind2 == 0 ? 'borderLeft borderTop'
+                      : ind1 % 5 == 0 && ind2 == solMatrix[ind1].length-1 ? 'borderRight borderTop'
+                      : ind1 == 0 && ind2 == solMatrix[ind1].length-1 ? 'borderRight borderTop' 
+                      : ind1 == 0 && ind2 == 0 ? 'borderTop borderLeft' 
+                      : ind1 == 0 ? 'borderTop'
+                      : ind2 == 0 ? 'borderLeft'
+                      : ind1 == solMatrix.length-1 && ind2 == solMatrix[ind1].length-1 ? 'borderRight borderBottom' 
+                      : ind1 == solMatrix.length-1 ? 'borderBottom' 
+                      : ind2 == solMatrix[ind1].length-1 ? 'borderRight' 
+                      
+                      : ind1 % 5 == 0 && ind2 % 5 == 0 ? 'borderTop borderLeft'
+                      : ind1 % 5 == 0 ? 'borderTop'
+                      : ind2 % 5 == 0 ? 'borderLeft'
+                      : '') + (val == 1 ? ' choosenOne' : val == 3 ? ' wrongOne' : '')}>{val == 2 ? 'X' : ''}</button>
                 )}</>               
           )}</div>
     )

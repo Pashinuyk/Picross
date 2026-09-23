@@ -21,8 +21,16 @@ button {
       border-left: solid 4px #1E4D94
 }
 
-.ChoosenOne {
+.choosenOne {
       background-color: #138ff4;
+}
+
+.backlightChoosen {
+      background-color: rgb(30, 187, 192)
+}
+
+.wrongOne {
+      background-color: red;
 }
 
 .redrawnNumber {
@@ -31,8 +39,4 @@ button {
 
 .backlight {
       background-color: rgb(46, 204, 113, 0.4)
-}
-
-.backlightChoosen {
-      background-color: rgb(30, 187, 192)
 }
