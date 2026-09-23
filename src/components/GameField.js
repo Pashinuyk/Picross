@@ -2,7 +2,7 @@ import './GameField.css'
 import { Stack } from 'immutable'
 import { useState } from 'react'
 
-const num = 0
+const num = 5
 
 function ChangeSolMatrix(table, value, row, col) {
   table[row][col] = value
@@ -67,18 +67,57 @@ function AimingField(el) {
 }
 
 function LengthCount(str, ind) {
-  
+  let count = 1
+
+  for (let i=ind+1; i<str.length; i++) {
+    if (str[i] == 1) count++
+    else break
+  }
+
+  return count
+}
+
+function AimingTipsNew(table, el, isUp) {
+  let isStr = false
+
+  let i=0; let j=0
+  isUp == true ? j = el.currentTarget.id.split(' ')[1] : i = el.currentTarget.id.split(' ')[1]
+
+  while (i > table.length || j > table[0].length) {
+    let elem = document.getElementById(`$${i} ${j}`)
+    isUp == true ? j++ : i++
+
+    if (elem.classList.contains('choosenOne')) { 
+      elem.classList.toggle('backlightChoosen')
+      if (isStr == false) elem.innerHTML == '' ? elem.innerHTML = LengthCount(table[j], i) 
+      : elem.innerHTML = ''
+      isStr = true
+    }  
+    else {
+      elem.classList.toggle('backlight')
+      isStr = false    
+    }
+  }
 }
 
 //Выделение поля когда курсор на
 //боковых числах-подсказках
-function AimingTipsH(el, size) {
-  //console.log(el.currentTarget.id)
+function AimingTipsH(str, el) {
+  let isStr = false
 
-  for (let i=0; i<size; i++) {
+  for (let i=0; i<str.length; i++) {
     let elem = document.getElementById(`${el.currentTarget.id.split(' ')[1]} ${i}`)
-    if (elem.classList.contains('choosenOne')) elem.classList.toggle('backlightChoosen')
-    else elem.classList.toggle('backlight')
+    if (elem.classList.contains('choosenOne')) { 
+      elem.classList.toggle('backlightChoosen')
+      if (isStr == false) elem.innerHTML == '' ? elem.innerHTML = LengthCount(str, i) 
+      : elem.innerHTML = ''
+      isStr = true
+    }
+    else if (elem.classList.contains('wrongOne')) elem.classList.toggle('backlightWrong')  
+    else {
+      elem.classList.toggle('backlight')
+      isStr = false
+    }  
   }   
 }
 
@@ -116,11 +155,6 @@ const ButtonAction = (OGtable, table, change, el, value) => {
   } 
   else if (newTable[row][col] == 2 && value == 2) change(ChangeSolMatrix(newTable, 0, row, col))
   else change(ChangeSolMatrix(newTable, value, row, col))
-
-}
-
-// Проверка на правильный ответ
-const CheckForCorrectness = () => {
 
 }
 
@@ -166,8 +200,8 @@ const GameField = (props) => {
           <>
                 {/* Боковые подсказки */}
                 <div id={'H' + ' ' + ind1} 
-                onMouseOver={(e) => AimingTipsH(e, solMatrix[ind1].length)}
-                onMouseOut={(e) => AimingTipsH(e, solMatrix[ind1].length)}
+                onMouseOver={(e) => AimingTipsH(solMatrix[ind1], e)}
+                onMouseOut={(e) => AimingTipsH(solMatrix[ind1], e)}
                 style={{display: 'flex',
                   alignItems: 'center',
                   flexDirection: 'row-reverse',
