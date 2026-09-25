@@ -147,7 +147,7 @@ const ButtonAction = (OGtable, table, change, el, value) => {
   const col = el.target.id.split(' ')[1]
 
   if (table[row][col] == 1 || table[row][col] == 3) return
-
+  
   const newTable = table.map(row => [...row])
 
   if (OGtable[row][col] != 1 && value == 1) {
@@ -187,6 +187,7 @@ const GameField = (props) => {
 
              {/* Верхние подсказки */}
           <div></div>
+
           {VerticalTipsPlace(OGtable).map((str, ind) =>
             <div id={'V ' + ind}
               onMouseOver={(e) => AimingTipsV(e, solMatrix.length)}

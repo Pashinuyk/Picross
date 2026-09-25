@@ -1,8 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { useState } from 'react'
 import './index.css';
 import App from './App';
 import UppearBar from './components/UppearBar';
+import LowerMenu from './components/LowerMenu';
 import reportWebVitals from './reportWebVitals';
 import levels from './data';
 
