@@ -1,6 +1,6 @@
 import './GameField.css'
 import { Stack } from 'immutable'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 const num = 5
 
@@ -147,7 +147,7 @@ const ButtonAction = (OGtable, table, change, el, value) => {
   const col = el.target.id.split(' ')[1]
 
   if (table[row][col] == 1 || table[row][col] == 3) return
-
+  
   const newTable = table.map(row => [...row])
 
   if (OGtable[row][col] != 1 && value == 1) {
@@ -160,7 +160,7 @@ const ButtonAction = (OGtable, table, change, el, value) => {
 
 const GameField = (props) => {
   
-    const OGtable = props.level[num].content
+    const OGtable = props.level
     const rows = OGtable.length;
     const cols = OGtable.length;
   
@@ -169,17 +169,26 @@ const GameField = (props) => {
     );
     const [Dragging, setDragging] = useState(false)
 
+    useEffect(() => {
+      changeSolution(
+        Array.from({ length: rows }, () => Array(cols).fill(0))
+      )
+    }, [OGtable])
+
+    console.log(solMatrix, ' ', solMatrix.length, solMatrix.length)
+
     return (
             <div style={{display: 'grid',  
-              gridTemplateRows: `160px repeat(${props.level[num].content.length}, 1fr)`,  
-              gridTemplateColumns: `25% repeat(${props.level[num].content[0].length}, 1fr)`,
+              gridTemplateRows: `160px repeat(${OGtable.length}, 1fr)`,  
+              gridTemplateColumns: `25% repeat(${OGtable[0].length}, 1fr)`,
               width: 'max-content',
               margin: 'auto'
              }}>  
 
              {/* Верхние подсказки */}
           <div></div>
-          {VerticalTipsPlace(props.level[num].content).map((str, ind) =>
+
+          {VerticalTipsPlace(OGtable).map((str, ind) =>
             <div id={'V ' + ind}
               onMouseOver={(e) => AimingTipsV(e, solMatrix.length)}
               onMouseOut={(e) => AimingTipsV(e, solMatrix.length)}              
@@ -208,7 +217,7 @@ const GameField = (props) => {
                   fontSize: '20px',
                   fontWeight: 'bold', 
                   overflowX: 'auto',
-                }}>{HorizontalTipsPlace(props.level[num].content[ind1]).reverse().map((val) => 
+                }}>{HorizontalTipsPlace(OGtable[ind1]).reverse().map((val) => 
                   <div style={{margin: '0px 10px'}} 
                     onClick={(e) => NumbersRecolor(e)}>
                       {val}
