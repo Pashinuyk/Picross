@@ -14,7 +14,6 @@ function ChangeSolMatrix(table, value, row, col) {
 function HorizontalTipsPlace(str) {
   let stack = [...new Stack]
   str.reduce((product, item, index) => {
-    
     if (item != 0) {
       if (index == str.length-1) stack.push(product+item)
       return product + 1  
@@ -175,7 +174,7 @@ const GameField = (props) => {
       )
     }, [OGtable])
 
-    console.log(solMatrix, ' ', solMatrix.length, solMatrix.length)
+    //console.log(solMatrix, ' ', solMatrix.length, solMatrix.length)
 
     return (
             <div style={{display: 'grid',  
