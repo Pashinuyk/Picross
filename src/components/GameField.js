@@ -13,6 +13,7 @@ function ChangeSolMatrix(table, value, row, col) {
 // Размещение чисел-подсказок сбоку
 function HorizontalTipsPlace(str) {
   let stack = [...new Stack]
+
   str.reduce((product, item, index) => {
     if (item != 0) {
       if (index == str.length-1) stack.push(product+item)
@@ -128,6 +129,7 @@ function AimingTipsV(el, size) {
   for (let i=0; i<size; i++) {
     let elem = document.getElementById(`${i} ${el.currentTarget.id.split(' ')[1]}`)
     if (elem.classList.contains('choosenOne')) elem.classList.toggle('backlightChoosen')
+    else if (elem.classList.contains('wrongOne')) elem.classList.toggle('backlightWrong')
     else document.getElementById(`${i} ${el.currentTarget.id.split(' ')[1]}`).classList.toggle('backlight')
   }   
 }
@@ -158,21 +160,22 @@ const ButtonAction = (OGtable, table, change, el, value) => {
 }
 
 const GameField = (props) => {
+
   
-    const OGtable = props.level
-    const rows = OGtable.length;
-    const cols = OGtable.length;
-  
+    const [OGtable, changeOGtable] = useState(props.level)
+
     const [solMatrix, changeSolution] = useState(
-      Array.from({ length: rows }, () => Array(cols).fill(0))
+      Array.from({ length: props.level.length }, () => Array(props.level[0].length).fill(0))
     );
     const [Dragging, setDragging] = useState(false)
 
     useEffect(() => {
       changeSolution(
-        Array.from({ length: rows }, () => Array(cols).fill(0))
+        Array.from({ length: props.level.length }, () => Array(props.level[0].length).fill(0))
       )
-    }, [OGtable])
+
+      changeOGtable(props.level)
+    }, [props.level])
 
     //console.log(solMatrix, ' ', solMatrix.length, solMatrix.length)
 
