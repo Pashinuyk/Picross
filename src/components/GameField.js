@@ -1,6 +1,6 @@
 import './GameField.css'
 import { Stack } from 'immutable'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 const num = 5
 
@@ -13,8 +13,8 @@ function ChangeSolMatrix(table, value, row, col) {
 // Размещение чисел-подсказок сбоку
 function HorizontalTipsPlace(str) {
   let stack = [...new Stack]
+
   str.reduce((product, item, index) => {
-    
     if (item != 0) {
       if (index == str.length-1) stack.push(product+item)
       return product + 1  
@@ -66,7 +66,7 @@ function AimingField(el) {
 
 }
 
-function LengthCount(str, ind) {
+function LengthCountH(str, ind) {
   let count = 1
 
   for (let i=ind+1; i<str.length; i++) {
@@ -77,27 +77,15 @@ function LengthCount(str, ind) {
   return count
 }
 
-function AimingTipsNew(table, el, isUp) {
-  let isStr = false
+function LengthCountV(matrix, indH, indV) {
+  let count = 1
 
-  let i=0; let j=0
-  isUp == true ? j = el.currentTarget.id.split(' ')[1] : i = el.currentTarget.id.split(' ')[1]
-
-  while (i > table.length || j > table[0].length) {
-    let elem = document.getElementById(`$${i} ${j}`)
-    isUp == true ? j++ : i++
-
-    if (elem.classList.contains('choosenOne')) { 
-      elem.classList.toggle('backlightChoosen')
-      if (isStr == false) elem.innerHTML == '' ? elem.innerHTML = LengthCount(table[j], i) 
-      : elem.innerHTML = ''
-      isStr = true
-    }  
-    else {
-      elem.classList.toggle('backlight')
-      isStr = false    
-    }
+  for (let i=indV+1; i<matrix.length; i++) {
+    if (matrix[i][indH] == 1) count++
+    else break
   }
+
+  return count
 }
 
 //Выделение поля когда курсор на
@@ -109,7 +97,7 @@ function AimingTipsH(str, el) {
     let elem = document.getElementById(`${el.currentTarget.id.split(' ')[1]} ${i}`)
     if (elem.classList.contains('choosenOne')) { 
       elem.classList.toggle('backlightChoosen')
-      if (isStr == false) elem.innerHTML == '' ? elem.innerHTML = LengthCount(str, i) 
+      if (isStr == false) elem.innerHTML == '' ? elem.innerHTML = LengthCountH(str, i) 
       : elem.innerHTML = ''
       isStr = true
     }
@@ -123,13 +111,22 @@ function AimingTipsH(str, el) {
 
 //Выделение поля когда курсор на
 //верхних числах-подсказках
-function AimingTipsV(el, size) {
-  //console.log(el.currentTarget.id)
+function AimingTipsV(el, field, ind) {
+  let isStr = false;
 
-  for (let i=0; i<size; i++) {
+  for (let i=0; i<field.length; i++) {
     let elem = document.getElementById(`${i} ${el.currentTarget.id.split(' ')[1]}`)
-    if (elem.classList.contains('choosenOne')) elem.classList.toggle('backlightChoosen')
-    else document.getElementById(`${i} ${el.currentTarget.id.split(' ')[1]}`).classList.toggle('backlight')
+    if (elem.classList.contains('choosenOne')) {
+      elem.classList.toggle('backlightChoosen')
+      if (isStr == false) elem.innerHTML == '' ? elem.innerHTML = LengthCountV(field, ind, i)
+      : elem.innerHTML = ''
+      isStr = true
+    }
+    else if (elem.classList.contains('wrongOne')) elem.classList.toggle('backlightWrong')
+    else {
+      document.getElementById(`${i} ${el.currentTarget.id.split(' ')[1]}`).classList.toggle('backlight')
+      isStr = false
+    }
   }   
 }
 
@@ -147,7 +144,7 @@ const ButtonAction = (OGtable, table, change, el, value) => {
   const col = el.target.id.split(' ')[1]
 
   if (table[row][col] == 1 || table[row][col] == 3) return
-
+  
   const newTable = table.map(row => [...row])
 
   if (OGtable[row][col] != 1 && value == 1) {
@@ -159,30 +156,40 @@ const ButtonAction = (OGtable, table, change, el, value) => {
 }
 
 const GameField = (props) => {
-  
-    const OGtable = props.level[num].content
-    const rows = OGtable.length;
-    const cols = OGtable.length;
-  
+
+    const [OGtable, changeOGtable] = useState(props.level)
+
     const [solMatrix, changeSolution] = useState(
-      Array.from({ length: rows }, () => Array(cols).fill(0))
+      Array.from({ length: props.level.length }, () => Array(props.level[0].length).fill(0))
     );
     const [Dragging, setDragging] = useState(false)
 
+    useEffect(() => {
+      changeSolution(
+        Array.from({ length: props.level.length }, () => Array(props.level[0].length).fill(0))
+      )
+      changeOGtable(props.level)
+
+      document.querySelectorAll('.redrawnNumber').forEach(val => {
+        val.classList.remove('redrawnNumber')
+      })
+    }, [props.level])
+
     return (
-            <div style={{display: 'grid',  
-              gridTemplateRows: `160px repeat(${props.level[num].content.length}, 1fr)`,  
-              gridTemplateColumns: `25% repeat(${props.level[num].content[0].length}, 1fr)`,
+          <div style={{display: 'grid',  
+              gridTemplateRows: `160px repeat(${OGtable.length}, 1fr)`,  
+              gridTemplateColumns: `25% repeat(${OGtable[0].length}, 1fr)`,
               width: 'max-content',
               margin: 'auto'
-             }}>  
+            }}>  
 
              {/* Верхние подсказки */}
           <div></div>
-          {VerticalTipsPlace(props.level[num].content).map((str, ind) =>
+
+          {VerticalTipsPlace(OGtable).map((str, ind) =>
             <div id={'V ' + ind}
-              onMouseOver={(e) => AimingTipsV(e, solMatrix.length)}
-              onMouseOut={(e) => AimingTipsV(e, solMatrix.length)}              
+              onMouseOver={(e) => AimingTipsV(e, solMatrix, ind)}
+              onMouseOut={(e) => AimingTipsV(e, solMatrix, ind)}              
               style={{display: 'flex', overflowY: 'auto',
               flexDirection: 'column-reverse'
             }}>
@@ -208,7 +215,7 @@ const GameField = (props) => {
                   fontSize: '20px',
                   fontWeight: 'bold', 
                   overflowX: 'auto',
-                }}>{HorizontalTipsPlace(props.level[num].content[ind1]).reverse().map((val) => 
+                }}>{HorizontalTipsPlace(OGtable[ind1]).reverse().map((val) => 
                   <div style={{margin: '0px 10px'}} 
                     onClick={(e) => NumbersRecolor(e)}>
                       {val}
