@@ -123,7 +123,7 @@ function AimingTipsH(str, el) {
 
 //Выделение поля когда курсор на
 //верхних числах-подсказках
-function AimingTipsV(el, size) {
+function AimingTipsV(el, field, ind) {
   //console.log(el.currentTarget.id)
 
   for (let i=0; i<size; i++) {
@@ -161,7 +161,6 @@ const ButtonAction = (OGtable, table, change, el, value) => {
 
 const GameField = (props) => {
 
-  
     const [OGtable, changeOGtable] = useState(props.level)
 
     const [solMatrix, changeSolution] = useState(
@@ -177,15 +176,17 @@ const GameField = (props) => {
       changeOGtable(props.level)
     }, [props.level])
 
-    //console.log(solMatrix, ' ', solMatrix.length, solMatrix.length)
+    if (document.getElementsByClassName('redrawnNumber').length > 0) {
+      document.getElementsByClassName('redrawnNumber')[0].classList.remove('redrawnNumber');
+    }
 
     return (
-            <div style={{display: 'grid',  
+          <div style={{display: 'grid',  
               gridTemplateRows: `160px repeat(${OGtable.length}, 1fr)`,  
               gridTemplateColumns: `25% repeat(${OGtable[0].length}, 1fr)`,
               width: 'max-content',
               margin: 'auto'
-             }}>  
+            }}>  
 
              {/* Верхние подсказки */}
           <div></div>
