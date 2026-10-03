@@ -66,7 +66,7 @@ function AimingField(el) {
 
 }
 
-function LengthCount(str, ind) {
+function LengthCountH(str, ind) {
   let count = 1
 
   for (let i=ind+1; i<str.length; i++) {
@@ -77,27 +77,15 @@ function LengthCount(str, ind) {
   return count
 }
 
-function AimingTipsNew(table, el, isUp) {
-  let isStr = false
+function LengthCountV(matrix, indH, indV) {
+  let count = 1
 
-  let i=0; let j=0
-  isUp == true ? j = el.currentTarget.id.split(' ')[1] : i = el.currentTarget.id.split(' ')[1]
-
-  while (i > table.length || j > table[0].length) {
-    let elem = document.getElementById(`$${i} ${j}`)
-    isUp == true ? j++ : i++
-
-    if (elem.classList.contains('choosenOne')) { 
-      elem.classList.toggle('backlightChoosen')
-      if (isStr == false) elem.innerHTML == '' ? elem.innerHTML = LengthCount(table[j], i) 
-      : elem.innerHTML = ''
-      isStr = true
-    }  
-    else {
-      elem.classList.toggle('backlight')
-      isStr = false    
-    }
+  for (let i=indV+1; i<matrix.length; i++) {
+    if (matrix[i][indH] == 1) count++
+    else break
   }
+
+  return count
 }
 
 //Выделение поля когда курсор на
@@ -109,7 +97,7 @@ function AimingTipsH(str, el) {
     let elem = document.getElementById(`${el.currentTarget.id.split(' ')[1]} ${i}`)
     if (elem.classList.contains('choosenOne')) { 
       elem.classList.toggle('backlightChoosen')
-      if (isStr == false) elem.innerHTML == '' ? elem.innerHTML = LengthCount(str, i) 
+      if (isStr == false) elem.innerHTML == '' ? elem.innerHTML = LengthCountH(str, i) 
       : elem.innerHTML = ''
       isStr = true
     }
@@ -124,13 +112,21 @@ function AimingTipsH(str, el) {
 //Выделение поля когда курсор на
 //верхних числах-подсказках
 function AimingTipsV(el, field, ind) {
-  //console.log(el.currentTarget.id)
+  let isStr = false;
 
-  for (let i=0; i<size; i++) {
+  for (let i=0; i<field.length; i++) {
     let elem = document.getElementById(`${i} ${el.currentTarget.id.split(' ')[1]}`)
-    if (elem.classList.contains('choosenOne')) elem.classList.toggle('backlightChoosen')
+    if (elem.classList.contains('choosenOne')) {
+      elem.classList.toggle('backlightChoosen')
+      if (isStr == false) elem.innerHTML == '' ? elem.innerHTML = LengthCountV(field, ind, i)
+      : elem.innerHTML = ''
+      isStr = true
+    }
     else if (elem.classList.contains('wrongOne')) elem.classList.toggle('backlightWrong')
-    else document.getElementById(`${i} ${el.currentTarget.id.split(' ')[1]}`).classList.toggle('backlight')
+    else {
+      document.getElementById(`${i} ${el.currentTarget.id.split(' ')[1]}`).classList.toggle('backlight')
+      isStr = false
+    }
   }   
 }
 
@@ -172,13 +168,12 @@ const GameField = (props) => {
       changeSolution(
         Array.from({ length: props.level.length }, () => Array(props.level[0].length).fill(0))
       )
-
       changeOGtable(props.level)
-    }, [props.level])
 
-    if (document.getElementsByClassName('redrawnNumber').length > 0) {
-      document.getElementsByClassName('redrawnNumber')[0].classList.remove('redrawnNumber');
-    }
+      document.querySelectorAll('.redrawnNumber').forEach(val => {
+        val.classList.remove('redrawnNumber')
+      })
+    }, [props.level])
 
     return (
           <div style={{display: 'grid',  
@@ -193,8 +188,8 @@ const GameField = (props) => {
 
           {VerticalTipsPlace(OGtable).map((str, ind) =>
             <div id={'V ' + ind}
-              onMouseOver={(e) => AimingTipsV(e, solMatrix.length)}
-              onMouseOut={(e) => AimingTipsV(e, solMatrix.length)}              
+              onMouseOver={(e) => AimingTipsV(e, solMatrix, ind)}
+              onMouseOut={(e) => AimingTipsV(e, solMatrix, ind)}              
               style={{display: 'flex', overflowY: 'auto',
               flexDirection: 'column-reverse'
             }}>

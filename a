@@ -1,0 +1,139 @@
+[33mcommit 8056f92868fe2e71722489939682b6a9b6a23e81[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31mPicross/master[m[33m, [m[1;31mPicross/HEAD[m[33m)[m
+Author: Pashinuyk <pavelkiselev2004@gmail.com>
+Date:   Sat Oct 3 12:32:50 2026 +1000
+
+    Some fixes
+
+[33mcommit 0f6bfc95c2bea7e01d244d94ab0e1c93763d8fec[m
+Author: Pashinuyk <pavelkiselev2004@gmail.com>
+Date:   Fri Oct 2 16:02:10 2026 +1000
+
+    Fixed
+
+[33mcommit 4b4697225a03b3d53e36ca445e1741c15055a5aa[m
+Merge: 3cadf0b 7336ffa
+Author: Pashinuyk <pavelkiselev2004@gmail.com>
+Date:   Thu Oct 1 16:08:28 2026 +1000
+
+    New
+
+[33mcommit 3cadf0b4ecd22ddb63077c0f5c5eb1acbc13b295[m
+Author: Pashinuyk <pavelkiselev2004@gmail.com>
+Date:   Thu Oct 1 16:07:15 2026 +1000
+
+    New
+
+[33mcommit 7336ffa463e8e6d566095e55f5fa841981124146[m
+Merge: 7f83366 0aa3ac2
+Author: Pashinuyk <149459630+Pashinuyk@users.noreply.github.com>
+Date:   Sat Sep 26 00:54:20 2026 +1000
+
+    Merge branch 'main' into master
+
+[33mcommit 7f8336697d980954108f7a0cf41d1b2f51e9ff6d[m
+Author: Pashinuyk <pavelkiselev2004@gmail.com>
+Date:   Sat Sep 26 00:46:57 2026 +1000
+
+    Что-то новое
+
+[33mcommit 0aa3ac2116cd2a93507d304e64d1c7cdf7a01a40[m[33m ([m[1;31mPicross/main[m[33m)[m
+Author: Pashinuyk <pavelkiselev2004@gmail.com>
+Date:   Wed Sep 23 20:02:51 2026 +1000
+
+    Some changes
+
+[33mcommit c7e69d2b00d671b45d9b6e8db6b955acd4545307[m
+Author: Pashinuyk <pavelkiselev2004@gmail.com>
+Date:   Wed Sep 23 19:31:41 2026 +1000
+
+    Числа и выделения
+
+[33mcommit 748b0a4b789c5ff3d33872daeb66e93a0325bae5[m
+Author: Pashinuyk <pavelkiselev2004@gmail.com>
+Date:   Wed Sep 23 18:54:20 2026 +1000
+
+    Добавлена матрица решений; переработана система распознавания ответов
+
+[33mcommit ce35a1527f1850789af57b85c206c21aac17321c[m
+Author: Pashinuyk <pavelkiselev2004@gmail.com>
+Date:   Wed Sep 23 16:22:54 2026 +1000
+
+    Закончены выделения
+
+[33mcommit c3a35451769efb7b839f752d25dd46b07d66f433[m
+Author: Pashinuyk <pavelkiselev2004@gmail.com>
+Date:   Tue Sep 22 14:11:36 2026 +1000
+
+    Доработаны выделения
+
+[33mcommit 6a979956d342b697e3c47efd8df622910b02feb4[m
+Author: Pashinuyk <pavelkiselev2004@gmail.com>
+Date:   Mon Sep 14 20:42:07 2026 +1000
+
+    Начало создания подсветки для поля
+
+[33mcommit 53447d2d5d746ba0c6082dfa6f59340fc28f25d0[m
+Author: Pashinuyk <pavelkiselev2004@gmail.com>
+Date:   Mon Sep 14 19:03:38 2026 +1000
+
+    Исправление подсветки цифр-подсказок
+
+[33mcommit 2d9e8bb768e4f00e75535a9a36ec9729eb341640[m
+Author: Pashinuyk <pavelkiselev2004@gmail.com>
+Date:   Mon Sep 14 18:39:54 2026 +1000
+
+    Цифры-подсказки закрашиваются
+
+[33mcommit f5b5ae37af73f81cc5f02f1043da91d62b76ff30[m
+Author: Pashinuyk <pavelkiselev2004@gmail.com>
+Date:   Wed Sep 2 02:56:32 2026 +1000
+
+    Some additions to the GameField
+
+[33mcommit aab665b40bf75b19af72b787fc7538f1ec882245[m
+Author: Pashinuyk <pavelkiselev2004@gmail.com>
+Date:   Tue Sep 1 23:10:31 2026 +1000
+
+    Tips are DONE
+
+[33mcommit 1ba2c3e06e1f00320b2d4a75df719a6b8573b84d[m
+Author: Pashinuyk <pavelkiselev2004@gmail.com>
+Date:   Tue Sep 1 15:26:40 2026 +1000
+
+    Gamefield redone into Grid-element
+
+[33mcommit 9b3969af6ad5419849026c4be8a1d291ce59e4f6[m
+Author: Pashinuyk <pavelkiselev2004@gmail.com>
+Date:   Tue Sep 1 14:01:17 2026 +1000
+
+    The last version, I don't remember what I last commited
+
+[33mcommit d70384bce6caf40b0a213f56c323428f2d51bfba[m
+Author: Pashinuyk <pavelkiselev2004@gmail.com>
+Date:   Sun Aug 30 02:50:57 2026 +1000
+
+    Additions to the interface
+
+[33mcommit 53964604b43ee544826c51aefe66a33a05ab3fb3[m
+Author: Pashinuyk <pavelkiselev2004@gmail.com>
+Date:   Sun Aug 30 01:18:56 2026 +1000
+
+    Borders were added
+
+[33mcommit 5c6b3fa7679f58e1ef06b109b72a0376d6a833d6[m
+Author: Pashinuyk <pavelkiselev2004@gmail.com>
+Date:   Sat Aug 29 20:54:19 2026 +1000
+
+    The field is now shown
+
+[33mcommit 0f2c2f4f898ad6f5795f2f912af81ad4b50cdbe2[m
+Author: Pashinuyk <pavelkiselev2004@gmail.com>
+Date:   Sat Aug 29 18:50:50 2026 +1000
+
+    The brand new project
+
+[33mcommit e748314e5c37481173a3b11c4298f131ec4eaa92[m
+Author: Pashinuyk <pavelkiselev2004@gmail.com>
+Date:   Sat Aug 29 16:35:20 2026 +1000
+
+    Initialize project using Create React App
