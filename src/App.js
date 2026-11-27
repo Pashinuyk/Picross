@@ -13,7 +13,7 @@ const App = (props) => {
         <div className='App'>
           <span>{lvlNum}</span>
           <GameField level={props.levels[lvlNum].content} />
-          <LowerMenu lvlNum={lvlNum} changer={changeLvlNum} />
+          <LowerMenu lvlNum={lvlNum} maxLvl={props.levels.length} changer={changeLvlNum} />
         </div>
       );
     }

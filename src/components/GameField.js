@@ -147,11 +147,12 @@ const ButtonAction = (OGtable, table, change, el, value) => {
   
   const newTable = table.map(row => [...row])
 
-  if (OGtable[row][col] != 1 && value == 1) {
+  if (OGtable[row][col] != 1 && value == 0) {
     change(ChangeSolMatrix(newTable, 3, row, col))
   } 
+  else if (newTable[row][col] == 0 && value == 2) change(ChangeSolMatrix(newTable, 2, row, col))
   else if (newTable[row][col] == 2 && value == 2) change(ChangeSolMatrix(newTable, 0, row, col))
-  else change(ChangeSolMatrix(newTable, value, row, col))
+  else change(ChangeSolMatrix(newTable, 1, row, col))
 
 }
 
@@ -162,7 +163,7 @@ const GameField = (props) => {
     const [solMatrix, changeSolution] = useState(
       Array.from({ length: props.level.length }, () => Array(props.level[0].length).fill(0))
     );
-    const [Dragging, setDragging] = useState(false)
+    const [dragging, setDragging] = useState(false)
 
     useEffect(() => {
       changeSolution(
@@ -176,7 +177,8 @@ const GameField = (props) => {
     }, [props.level])
 
     return (
-          <div style={{display: 'grid',  
+          <div 
+              style={{display: 'grid',  
               gridTemplateRows: `160px repeat(${OGtable.length}, 1fr)`,  
               gridTemplateColumns: `25% repeat(${OGtable[0].length}, 1fr)`,
               width: 'max-content',
@@ -184,7 +186,7 @@ const GameField = (props) => {
             }}>  
 
              {/* Верхние подсказки */}
-          <div></div>
+          <div>{String(dragging)}</div>
 
           {VerticalTipsPlace(OGtable).map((str, ind) =>
             <div id={'V ' + ind}
@@ -225,9 +227,16 @@ const GameField = (props) => {
                {/* Игровое поле */}
                { str.map((val, ind2) =>    
                   <button id={ind1 + ' ' + ind2} 
-                    onClick={(e) => ButtonAction(OGtable, solMatrix, changeSolution, e, 1)}
-                    onContextMenu={(e) => ButtonAction(OGtable, solMatrix, changeSolution, e, 2)}
-                    onMouseOver={(e) => AimingField(e)}
+                    onMouseDown={(e) => {
+                      setDragging(true);
+                      ButtonAction(OGtable, solMatrix, changeSolution, e, e.button);
+                    }}
+                    onContextMenu={(e) => e.preventDefault()}
+                    onMouseOver={(e) => {
+                      if (dragging) ButtonAction(OGtable, solMatrix, changeSolution, e, e.buttons);
+                      AimingField(e);
+                    }}
+                    onMouseUp={(e) => setDragging(false)}
                     onMouseOut={(e) => AimingField(e)}
                     className={(ind1 == solMatrix.length-1 && ind2 == 0 ? 'borderLeft borderBottom'
                       : ind1 == 0 && ind2 % 5 == 0 ? 'borderTop borderLeft'

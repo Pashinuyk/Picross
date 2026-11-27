@@ -6,8 +6,14 @@ const LowerMenu = (props) => {
           <div style={{ marginTop: '100px', marginBottom: '100px',
             display: 'flex', justifyContent: 'space-around'
            }}>
-            <button onClick={() => props.changer(props.lvlNum-1)}>1</button>
-            <button onClick={() => props.changer(props.lvlNum+1)}>2</button>
+            <button disabled={props.lvlNum == 0 ? true : false} 
+                    onClick={() => props.changer(props.lvlNum-1)}>
+                      1
+            </button>
+            <button disabled={props.lvlNum == props.maxLvl-1 ? true : false}
+                    onClick={() => props.changer(props.lvlNum+1)}>
+              2
+            </button>
           </div>
         </>  
     )
